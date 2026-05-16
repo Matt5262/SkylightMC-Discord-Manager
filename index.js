@@ -23,8 +23,6 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds]
 });
 
-let data = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
-
 client.once(Events.ClientReady, function () {
     console.log(`Logged in as ${client.user.tag}`);
     client.user.setActivity('SkylightMC', {
