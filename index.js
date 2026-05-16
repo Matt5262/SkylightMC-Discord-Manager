@@ -1,4 +1,6 @@
 require('dotenv').config();
+const fs = require('fs');
+let data = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
 
 const {
     Client,
@@ -21,8 +23,7 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds]
 });
 
-let verifyWord = "apple";
-let verifyRole = null;
+let data = JSON.parse(fs.readFileSync('./data.json', 'utf8'));
 
 client.once(Events.ClientReady, function () {
     console.log(`Logged in as ${client.user.tag}`);
@@ -38,17 +39,21 @@ client.on(Events.InteractionCreate, async function (interaction) {
 
         if (interaction.commandName === 'setverifyword') {
 
-            verifyWord = interaction.options.getString('word');
+            data.verifyWord = interaction.options.getString('word');
+
+            fs.writeFileSync('./data.json', JSON.stringify(data, null, 2));
 
             await interaction.reply({
-                content: `Verify word set to: ${verifyWord}`,
+                content: `Verify word set to: ${data.verifyWord}`,
                 ephemeral: true
             });
         }
 
         if (interaction.commandName === 'setverifyrole') {
 
-            verifyRole = interaction.options.getRole('role').id;
+            data.verifyRole = interaction.options.getRole('role').id;
+
+            fs.writeFileSync('./data.json', JSON.stringify(data, null, 2));
 
             await interaction.reply({
                 content: `Verify role set.`,
@@ -115,11 +120,11 @@ client.on(Events.InteractionCreate, async function (interaction) {
 
             const answer = interaction.fields.getTextInputValue('secret_word');
 
-            if (answer.toLowerCase() === verifyWord.toLowerCase()) {
+            if (answer.toLowerCase() === data.verifyWord.toLowerCase()) {
 
-                if (verifyRole) {
+                if (data.verifyRole) {
 
-                    await interaction.member.roles.add(verifyRole);
+                    await interaction.member.roles.add(data.verifyRole);
 
                     await interaction.reply({
                         content: 'You are now verified.',
