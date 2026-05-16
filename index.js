@@ -95,7 +95,7 @@ client.on(Events.InteractionCreate, async function (interaction) {
 
             const input = new TextInputBuilder()
                 .setCustomId('secret_word')
-                .setLabel('Enter the secret word hidden inside the rules.')
+                .setLabel('Enter the secret word found in the rules.')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(true);
 
